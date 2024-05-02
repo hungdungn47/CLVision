@@ -30,6 +30,8 @@ from utils.generic import set_random_seed, FileOutputDuplicator, evaluate
 from utils.short_text_logger import ShortTextLogger
 from avalanche.training.supervised import ExpertGateStrategy
 from avalanche.models import ExpertGate
+from avalanche.training.supervised import EWC
+from avalanche.models import MTSimpleMLP
 
 
 def main(args):
@@ -75,22 +77,22 @@ def main(args):
     # --- Your Plugins
     plugins = [
         # Implement your own plugins or use predefined ones
-        MyPlugin(),
-        replay_plugin
+        MyPlugin()
     ]
 
     # --- Strategy
     # Implement your own Strategy in MyStrategy and replace this example Approach
     # Uncomment this line to test LwF baseline with unlabelled pool usage
-    cl_strategy = ExpertGateStrategy(model=ExpertGate(shape=(3, 227, 227), device=device),
+    cl_strategy = EWC(model=MTSimpleMLP(),
     # cl_strategy = MyStrategy(model=model,
-                             optimizer=torch.optim.Adam(model.parameters(), lr=0.001),
+                             optimizer=torch.optim.Adam(model.parameters(), lr=0.01),
                              train_mb_size=64,
                              train_epochs=20,
                              eval_mb_size=256,
                              device=device,
                              plugins=competition_plugins + plugins,
-                             evaluator=eval_plugin)
+                             evaluator=eval_plugin,
+                             ewc_lambda=0.4,)
 
     # --- Sequence of incremental training tasks/experiences
     for exp_idx, (train_exp, unl_ds) in enumerate(zip(benchmark.train_stream, benchmark.unlabelled_stream)):
