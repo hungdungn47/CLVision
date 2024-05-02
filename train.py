@@ -66,7 +66,7 @@ def main(args):
     ]
     storage_policy = ReservoirSamplingBuffer(max_size=100)
     replay_plugin = ReplayPlugin(
-        mem_size=100, batch_size=1, storage_policy=storage_policy
+        mem_size=10, batch_size=1, storage_policy=storage_policy
     )
 
     # --- Your Plugins
