@@ -86,6 +86,7 @@ def main(args):
     cl_strategy = EWC(model=MTSimpleMLP(),
     # cl_strategy = MyStrategy(model=model,
                              optimizer=torch.optim.Adam(model.parameters(), lr=0.01),
+                             criterion=CrossEntropyLoss(),
                              train_mb_size=64,
                              train_epochs=20,
                              eval_mb_size=256,
