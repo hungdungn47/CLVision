@@ -64,9 +64,9 @@ def main(args):
         GPUMemoryChecker(max_allowed=8000),
         TimeChecker(max_allowed=600)
     ]
-    storage_policy = ReservoirSamplingBuffer(max_size=100)
+    storage_policy = ReservoirSamplingBuffer(max_size=20)
     replay_plugin = ReplayPlugin(
-        mem_size=10, batch_size=1, storage_policy=storage_policy
+        mem_size=20, batch_size=1, storage_policy=storage_policy
     )
 
     # --- Your Plugins
