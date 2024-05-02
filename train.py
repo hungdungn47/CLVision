@@ -23,6 +23,8 @@ from utils.competition_plugins import (
 from strategies.my_plugin import MyPlugin
 from strategies.my_strategy import MyStrategy
 from strategies.lwf_unlabelled import LwFUnlabelled
+from avalanche.training.plugins import ReplayPlugin
+from avalanche.training.storage_policy import ReservoirSamplingBuffer
 from utils.generic import set_random_seed, FileOutputDuplicator, evaluate
 from utils.short_text_logger import ShortTextLogger
 
@@ -62,18 +64,23 @@ def main(args):
         GPUMemoryChecker(max_allowed=8000),
         TimeChecker(max_allowed=600)
     ]
+    storage_policy = ReservoirSamplingBuffer(max_size=100)
+    replay_plugin = ReplayPlugin(
+        mem_size=100, batch_size=1, storage_policy=storage_policy
+    )
 
     # --- Your Plugins
     plugins = [
         # Implement your own plugins or use predefined ones
-        MyPlugin()
+        MyPlugin(),
+        replay_plugin
     ]
 
     # --- Strategy
     # Implement your own Strategy in MyStrategy and replace this example Approach
     # Uncomment this line to test LwF baseline with unlabelled pool usage
-    # cl_strategy = LwFUnlabelled(model=model,
-    cl_strategy = MyStrategy(model=model,
+    cl_strategy = LwFUnlabelled(model=model,
+    # cl_strategy = MyStrategy(model=model,
                              optimizer=torch.optim.Adam(model.parameters(), lr=0.001),
                              criterion=CrossEntropyLoss(),
                              train_mb_size=64,
