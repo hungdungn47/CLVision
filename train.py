@@ -28,6 +28,8 @@ from avalanche.training.plugins import ReplayPlugin
 from avalanche.training.storage_policy import ReservoirSamplingBuffer
 from utils.generic import set_random_seed, FileOutputDuplicator, evaluate
 from utils.short_text_logger import ShortTextLogger
+from avalanche.training.supervised import ExpertGateStrategy
+from avalanche.models import ExpertGate
 
 
 def main(args):
@@ -77,15 +79,12 @@ def main(args):
         replay_plugin
     ]
 
-    ope_loss = OPELoss(class_per_task=50)
-
     # --- Strategy
     # Implement your own Strategy in MyStrategy and replace this example Approach
     # Uncomment this line to test LwF baseline with unlabelled pool usage
-    cl_strategy = LwFUnlabelled(model=model,
+    cl_strategy = ExpertGateStrategy(model=ExpertGate(shape=(3, 227, 227), device=device),
     # cl_strategy = MyStrategy(model=model,
                              optimizer=torch.optim.Adam(model.parameters(), lr=0.001),
-                             criterion=ope_loss,
                              train_mb_size=64,
                              train_epochs=20,
                              eval_mb_size=256,
