@@ -19,6 +19,7 @@ from utils.competition_plugins import (
     GPUMemoryChecker,
     TimeChecker
 )
+from modules.OPE import OPELoss
 
 from strategies.my_plugin import MyPlugin
 from strategies.my_strategy import MyStrategy
@@ -76,13 +77,15 @@ def main(args):
         replay_plugin
     ]
 
+    ope_loss = OPELoss(class_per_task=50)
+
     # --- Strategy
     # Implement your own Strategy in MyStrategy and replace this example Approach
     # Uncomment this line to test LwF baseline with unlabelled pool usage
     cl_strategy = LwFUnlabelled(model=model,
     # cl_strategy = MyStrategy(model=model,
                              optimizer=torch.optim.Adam(model.parameters(), lr=0.001),
-                             criterion=CrossEntropyLoss(),
+                             criterion=ope_loss,
                              train_mb_size=64,
                              train_epochs=20,
                              eval_mb_size=256,
