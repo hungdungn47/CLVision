@@ -92,8 +92,7 @@ def main(args):
                              eval_mb_size=256,
                              device=device,
                              plugins=competition_plugins + plugins,
-                             evaluator=eval_plugin,
-                             ewc_lambda=0.4,)
+                             evaluator=eval_plugin,)
 
     # --- Sequence of incremental training tasks/experiences
     for exp_idx, (train_exp, unl_ds) in enumerate(zip(benchmark.train_stream, benchmark.unlabelled_stream)):
