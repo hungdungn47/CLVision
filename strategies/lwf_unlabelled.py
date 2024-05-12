@@ -44,6 +44,7 @@ class LwFUnlabelled(CompetitionTemplate):
         """
         super().__init__(model, optimizer, criterion, train_mb_size, train_epochs, eval_mb_size, device,
                          plugins, evaluator, eval_every, peval_mode, )
+        self.model = model
         self.unlabelled_alpha = 1.0
         self.old_model: Optional[Module] = None
         self.unlabelled_dl: Optional[DataLoader] = None

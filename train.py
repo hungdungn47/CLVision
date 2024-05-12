@@ -43,7 +43,7 @@ def main(args):
 
     # --- Initialize Model
     set_random_seed()
-    model = torchvision.models.resnet18()
+    model = OPELoss()
     # This classification head increases its size automatically in avalanche with the number of
     # annotated samples. If you modify the network structure adapt accordingly
     model.fc = IncrementalClassifier(512, 2, masking=False)
@@ -83,7 +83,7 @@ def main(args):
     # --- Strategy
     # Implement your own Strategy in MyStrategy and replace this example Approach
     # Uncomment this line to test LwF baseline with unlabelled pool usage
-    cl_strategy = EWC(model=model,
+    cl_strategy = LwFUnlabelled(model=model,
     # cl_strategy = MyStrategy(model=model,
                              optimizer=torch.optim.Adam(model.parameters(), lr=0.01),
                              criterion=CrossEntropyLoss(),
