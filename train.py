@@ -43,7 +43,7 @@ def main(args):
 
     # --- Initialize Model
     set_random_seed()
-    model = OPELoss()
+    model = OPELoss(class_per_task=4)
     # This classification head increases its size automatically in avalanche with the number of
     # annotated samples. If you modify the network structure adapt accordingly
     model.fc = IncrementalClassifier(512, 2, masking=False)
